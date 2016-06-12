@@ -7,7 +7,8 @@
     "microsoft",
     "messenger",
     "bot",
-    "facebook"
+    "facebook",
+    "wit"
   ],
   "buildpacks": [
     {
@@ -25,6 +26,14 @@
     "APP_SECRET": {
       "description": "The Microsoft bot app secret",
       "value": "APP_SECRET"
+    },
+    "WIT_ACCESS_TOKEN": {
+        "description": "The Wit access token",
+        "value": "WIT_ACCESS_TOKEN"
+    },
+    "OPEN_WEATHER_MAP_APP_ID": {
+        "description": "The Open weather map App Id",
+        "value": "OPEN_WEATHER_MAP_APP_ID"
     },
     "SECRET_KEY_BASE": {
       "generator": "secret"

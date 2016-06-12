@@ -1,46 +1,25 @@
 defmodule EchoBot.MessagesController do
   use MicrosoftBot.Phoenix.Controller
   alias ExMicrosoftBot.Models.Message
-  alias ExMicrosoftBot.Client
 
   def message_received(conn, %Message{} = message) do
-    {new_text, is_delayed} = get_echo_message(message.text)
-    send_message_back(conn, message, new_text, is_delayed)
-  end
+    Logger.info "message_received: #{inspect(message)}"
 
-  defp get_echo_message(nil) do
-    {"ECHO: (empty)", false}
-  end
+    session_id = message.conversationId
 
-  defp get_echo_message("delayed " <> _ = text) do
-    {"ECHO: " <> text, true}
-  end
+    spawn fn ->
+      %{from: from, to: to, id: msgId} = message
+      context = %{"session" => %{"from" => from, "to" => to, "msgId" => msgId}}
+      Logger.info "message_received: context is #{inspect(context)}"
 
-  defp get_echo_message(text) do
-    {"ECHO: " <> text, false}
-  end
+      Wit.run_actions(get_wit_access_token, session_id, EchoBot.WeatherConversationAction, message.text, context, 10)
+    end
 
-  defp send_message_back(conn, %Message{} = message, text, true) do
-    spawn_sender(conn, message, text)
     resp(conn, 200, "")
   end
 
-  defp send_message_back(_conn, %Message{} = _, text, false) do
-    %{text: text}
+  defp get_wit_access_token() do
+    Application.get_env(:koinbot, :wit_access_token)
   end
 
-  defp spawn_sender(_conn, %Message{} = message, text) do
-    spawn fn ->
-      :timer.sleep(5000) # Wait for 5 seconds
-      get_bot_auth_data
-      |> Client.send_message(%{to: message.from, from: message.to, replyToMessageId: message.id, text: "DELAYED -> " <> text})
-    end
-  end
-
-  defp get_bot_auth_data() do
-    %ExMicrosoftBot.Models.AuthData{
-      app_id: Application.get_env(:microsoftbot, :app_id),
-      app_secret: Application.get_env(:microsoftbot, :app_secret)
-    }
-  end
 end

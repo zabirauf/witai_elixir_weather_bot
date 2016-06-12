@@ -25,3 +25,9 @@ config :logger, level: :info
 config :microsoftbot,
   app_id: System.get_env("APP_ID"),
   app_secret: System.get_env("APP_SECRET")
+
+config :koinbot,
+  wit_access_token: System.get_env("WIT_ACCESS_TOKEN")
+
+config :openweathermap,
+  app_id: System.get_env("OPEN_WEATHER_MAP_APP_ID")

@@ -32,6 +32,9 @@ defmodule EchoBot.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:ex_microsoftbot, "~> 0.1.0"},
-     {:phoenix_microsoftbot, "~> 0.1.0"}]
+     {:phoenix_microsoftbot, "~> 0.1.0"},
+     {:elixir_wit, "~> 0.1.0"},
+     {:httpotion, "~> 2.2.0"},
+     {:poison, "~> 2.0"}]
   end
 end
